@@ -33,6 +33,7 @@ void printList() const;
 void printListReverse() const;
 void printListReverse(listNode<ItemType> *node) const;
 bool find(ItemType item) const;
+bool isEmpty() const;
 
 };
 
@@ -47,7 +48,6 @@ template <typename ItemType>
 LinkedList<ItemType>::~LinkedList() {
   while (m_length > 0) {
     removeAtIndex(m_length-1);
-    m_length--;
   }
 }
 
@@ -68,6 +68,11 @@ void LinkedList<ItemType>::printListReverse(listNode<ItemType> *node) const {
 template <typename ItemType>
 int LinkedList<ItemType>::length() const {
   return m_length;
+}
+
+template <typename ItemType>
+bool LinkedList<ItemType>::isEmpty() const {
+  return m_length == 0;
 }
 
 template <typename ItemType>
