@@ -104,6 +104,25 @@ void LinkedList<ItemType>::removeAtIndex(int index) {
   m_length--;
 }
 
+/* 
+This function assumes the item already exists in the list
+i.e. this->find() will already have occurred
+*/
+template <typename ItemType>
+void LinkedList<ItemType>::removeItem(ItemType item) {
+  listNode<ItemType> *temp = m_head;
+  int index = 0;
+  int indexOfItem = 0;
+  while (temp->next != nullptr) {
+    if (temp->item == item) {
+      indexOfItem = index;
+    }
+    temp = temp->next;
+    index++;
+  }
+  this->removeAtIndex(indexOfItem);
+}
+
 template <typename ItemType>
 void LinkedList<ItemType>::insertFront(ItemType item) {
   struct listNode<ItemType> *temp = new listNode<ItemType>();
@@ -116,6 +135,19 @@ void LinkedList<ItemType>::insertFront(ItemType item) {
   m_head = temp;
   temp = nullptr;
   m_length++;
+}
+
+template <typename ItemType>
+bool LinkedList<ItemType>::find(ItemType item) const {
+  listNode<ItemType> *temp = m_head;
+  bool ret = false;
+  while (temp != nullptr) {
+    if (temp->item == item) 
+      ret = true;
+    temp = temp->next;
+  }
+  temp = nullptr;
+  return ret;
 }
 
 template <typename ItemType>

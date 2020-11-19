@@ -16,6 +16,8 @@ ifstream m_infile;
 LinkedList<int> m_list;
 void displayMenu() const;
 void readFileIntoList();
+void insertIntoList();
+void deleteFromList();
 
 public:
 Executive(char *fileName);
@@ -57,9 +59,9 @@ void Executive::run() {
         break;
       case 2: cout << "Length: " << m_list.length(); 
         break;
-      case 3: 
+      case 3: this->insertIntoList();
         break;
-      case 4: 
+      case 4: this->deleteFromList();
         break;
       case 5: 
         break;
@@ -83,6 +85,48 @@ void Executive::run() {
         break;
     }
     cout << "\n----------------\n";
+  }
+}
+
+void Executive::insertIntoList() {
+  string input;
+  int newItem;
+
+  while (input != "x") {
+    cout << "Choose a number to be inserted: ";
+    std::getline(cin, input);
+    try {
+      newItem = stoi(input);
+      m_list.insertFront(newItem);
+      cout << newItem << " has been inserted";
+      break;
+    } catch (exception& e) {
+      if (input != "x")
+        cout << "Invalid input. Input must be an integer. (enter 'x' to cancel)\n";
+    }
+  }
+}
+
+void Executive::deleteFromList() {
+  string input;
+  int itemToBeDeleted;
+
+  while (input != "x") {
+    cout << "Choose a number to be deleted from the list: ";
+    std::getline(cin, input);
+    try {
+      itemToBeDeleted = stoi(input);
+      if (m_list.find(itemToBeDeleted)) {
+        m_list.removeItem(itemToBeDeleted);
+        cout << itemToBeDeleted << " has been deleted.";
+        break;
+      }
+      else 
+        cout << itemToBeDeleted << " is not in the list. Deleted nothing.";
+    } catch (exception& e) {
+      if (input != "x")
+        cout << "Invalid input. Input must be an integer. (enter 'x' to cancel)\n";
+    }
   }
 }
 
