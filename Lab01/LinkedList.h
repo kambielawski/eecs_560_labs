@@ -33,6 +33,7 @@ void printList() const;
 void printListReverse() const;
 void printListReverse(listNode<ItemType> *node) const;
 bool find(ItemType item) const;
+ItemType getItemAtIndex(int index) const;
 bool isEmpty() const;
 
 };
@@ -113,7 +114,7 @@ void LinkedList<ItemType>::removeItem(ItemType item) {
   listNode<ItemType> *temp = m_head;
   int index = 0;
   int indexOfItem = 0;
-  while (temp->next != nullptr) {
+  while (temp != nullptr) {
     if (temp->item == item) {
       indexOfItem = index;
     }
@@ -165,6 +166,24 @@ void LinkedList<ItemType>::insertBack(ItemType item) {
   }
   temp = nullptr;
   m_length++;
+}
+
+template <typename ItemType>
+ItemType LinkedList<ItemType>::getItemAtIndex(int index) const {
+  if (index < 0 || index > m_length-1) 
+    throw std::runtime_error("list index out of range");
+
+  listNode<ItemType>* temp = m_head;
+  ItemType item;
+  int i = 0;
+
+  while (i < index) {
+    temp = temp->next;
+    i++;
+  }
+  item = temp->item;
+  temp = nullptr;
+  return item;
 }
 
 template <typename ItemType>

@@ -2,8 +2,10 @@
 #define EXECUTIVE_H
 
 #include <iostream>
+#include <sstream>
 #include <fstream>
 #include <string>
+#include <climits>
 #include <exception>
 
 #include "LinkedList.h"
@@ -16,8 +18,10 @@ ifstream m_infile;
 LinkedList<int> m_list;
 void displayMenu() const;
 void readFileIntoList();
+int getInt(std::istream& stream) const;
 void insertIntoList();
 void deleteFromList();
+void printItemAtIndex() const;
 
 public:
 Executive(char *fileName);
@@ -41,17 +45,9 @@ void Executive::run() {
   string input; 
   int choice;
 
-  while (input != "11") {
+  while (choice != 11) {
     this->displayMenu();
-    try {
-      std::getline(cin, input);
-      choice = stoi(input);
-    } catch (exception& e) {
-      cout << "\n----------------\n";
-      cout << "invalid input: input must be an integer between 1-11";
-      cout << "\n----------------\n";
-      continue;
-    }
+    choice = this->getInt(cin);
 
     cout << "\n----------------\n";
     switch (choice) {
@@ -77,7 +73,7 @@ void Executive::run() {
         cout << "Reversed list:";
         m_list.printListReverse();
         break;
-      case 10: 
+      case 10: this->printItemAtIndex();
         break;
       case 11: cout << "Exiting...";
         break;
@@ -86,6 +82,25 @@ void Executive::run() {
     }
     cout << "\n----------------\n";
   }
+}
+
+int Executive::getInt(std::istream& stream) const {
+  string input;
+  int value;
+  bool loop = true;
+
+  while (loop) {
+    std::getline(stream, input);
+    std::stringstream linestream(input);
+
+    if (!(linestream >> value)) {
+      cout << "Invalid input. Enter an integer.\n";
+      continue; // input was not an integer
+    } else {
+      loop = false;
+    }
+  }
+  return value;
 }
 
 void Executive::insertIntoList() {
@@ -130,6 +145,22 @@ void Executive::deleteFromList() {
   }
 }
 
+void Executive::printItemAtIndex() const {
+  int index;
+  bool validIndex = false;
+
+  while (!validIndex) {
+    cout << "Enter an integer: ";
+    index = this->getInt(cin);
+    if (index < 0 || index > m_list.length() - 1) {
+      cout << "Index out of list range.\n";
+    } else {
+      validIndex = true;
+      cout << "Item at index " << index << " is " << m_list.getItemAtIndex(index);
+    }
+  }
+}
+
 void Executive::readFileIntoList() {
   string line;
   int num;
@@ -152,7 +183,7 @@ void Executive::displayMenu() const {
   << "9. Reverse List\n"
   << "10. Print At\n"
   << "11. Exit\n\n"
-  << "Input:";
+  << "Input: ";
 }
 
 #endif
