@@ -141,14 +141,15 @@ void LinkedList<ItemType>::insertFront(ItemType item) {
 template <typename ItemType>
 bool LinkedList<ItemType>::find(ItemType item) const {
   listNode<ItemType> *temp = m_head;
-  bool ret = false;
   while (temp != nullptr) {
-    if (temp->item == item) 
-      ret = true;
+    if (temp->item == item) {
+      temp = nullptr;
+      return true;
+    }
     temp = temp->next;
   }
   temp = nullptr;
-  return ret;
+  return false;
 }
 
 template <typename ItemType>

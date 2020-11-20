@@ -22,6 +22,7 @@ int getInt(std::istream& stream) const;
 void insertIntoList();
 void deleteFromList();
 void printItemAtIndex() const;
+void findItemInList() const;
 
 public:
 Executive(char *fileName);
@@ -57,13 +58,13 @@ void Executive::run() {
         break;
       case 3: this->insertIntoList();
         break;
-      case 4: this->deleteFromList();
+      case 4: this->deleteFromList(); // delete
         break;
-      case 5: 
+      case 5: // delete duplicates
         break;
-      case 6: 
+      case 6: this->findItemInList(); 
         break;
-      case 7:  
+      case 7: // find next
         break;
       case 8: 
         cout << "List: ";
@@ -158,6 +159,17 @@ void Executive::printItemAtIndex() const {
       validIndex = true;
       cout << "Item at index " << index << " is " << m_list.getItemAtIndex(index);
     }
+  }
+}
+
+void Executive::findItemInList() const {
+  int itemToFind;
+  cout << "Enter an item to find: ";
+  itemToFind = this->getInt(cin);
+  if (m_list.find(itemToFind)) {
+    cout << itemToFind << " is in the list";
+  } else {
+    cout << itemToFind << " is not in the list";
   }
 }
 
