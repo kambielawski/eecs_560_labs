@@ -108,41 +108,24 @@ void Executive::insertIntoList() {
   string input;
   int newItem;
 
-  while (input != "x") {
-    cout << "Choose a number to be inserted: ";
-    std::getline(cin, input);
-    try {
-      newItem = stoi(input);
-      m_list.insertFront(newItem);
-      cout << newItem << " has been inserted";
-      break;
-    } catch (exception& e) {
-      if (input != "x")
-        cout << "Invalid input. Input must be an integer. (enter 'x' to cancel)\n";
-    }
-  }
+  cout << "Choose a number to be inserted: ";
+  newItem = this->getInt(cin);
+  m_list.insertFront(newItem);
 }
 
 void Executive::deleteFromList() {
   string input;
   int itemToBeDeleted;
 
-  while (input != "x") {
-    cout << "Choose a number to be deleted from the list: ";
-    std::getline(cin, input);
-    try {
-      itemToBeDeleted = stoi(input);
-      if (m_list.find(itemToBeDeleted)) {
-        m_list.removeItem(itemToBeDeleted);
-        cout << itemToBeDeleted << " has been deleted.";
-        break;
-      }
-      else 
-        cout << itemToBeDeleted << " is not in the list. Deleted nothing.";
-    } catch (exception& e) {
-      if (input != "x")
-        cout << "Invalid input. Input must be an integer. (enter 'x' to cancel)\n";
-    }
+  cout << "Choose a number to be deleted from the list: ";
+  itemToBeDeleted = this->getInt(cin);
+
+  if (m_list.find(itemToBeDeleted)) {
+    m_list.removeItem(itemToBeDeleted);
+    cout << itemToBeDeleted << " has been deleted.";
+  }
+  else {
+    cout << itemToBeDeleted << " is not in the list. Deleted nothing.";
   }
 }
 
