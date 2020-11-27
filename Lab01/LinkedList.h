@@ -34,7 +34,9 @@ void printListReverse() const;
 void printListReverse(listNode<ItemType> *node) const;
 bool find(ItemType item) const;
 ItemType getItemAtIndex(int index) const;
+int getIndexOfItem(ItemType item) const;
 bool isEmpty() const;
+int countItem(ItemType item) const;
 
 };
 
@@ -74,6 +76,35 @@ int LinkedList<ItemType>::length() const {
 template <typename ItemType>
 bool LinkedList<ItemType>::isEmpty() const {
   return m_length == 0;
+}
+
+/*
+function returns index of FIRST occurrence of item
+function assumes find(item) has already returned true
+*/
+template <typename ItemType>
+int LinkedList<ItemType>::getIndexOfItem(ItemType item) const {
+  listNode<ItemType> *temp = m_head;
+  int index = 0;
+  while (temp != nullptr) {
+    if (temp->item == item) return index;
+    index++;
+    temp = temp->next;
+  }
+  throw std::runtime_error("Could not find item in list"); 
+}
+
+template <typename ItemType>
+int LinkedList<ItemType>::countItem(ItemType item) const {
+  listNode<ItemType> *temp = m_head;
+  int count = 0;
+  
+  while (temp != nullptr) {
+    if (temp->item == item) count++;
+    temp = temp->next;
+  }
+
+  return count;
 }
 
 template <typename ItemType>

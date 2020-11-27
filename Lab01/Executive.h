@@ -9,7 +9,6 @@
 #include <exception>
 
 #include "LinkedList.h"
-
 using namespace std;
 
 class Executive {
@@ -23,6 +22,8 @@ void insertIntoList();
 void deleteFromList();
 void printItemAtIndex() const;
 void findItemInList() const;
+void findNextItem() const;
+void deleteDuplicates();
 
 public:
 Executive(char *fileName);
@@ -43,7 +44,6 @@ Executive::Executive (char *fileName) {
 Executive::~Executive() {}
 
 void Executive::run() {
-  string input; 
   int choice;
 
   while (choice != 11) {
@@ -60,11 +60,11 @@ void Executive::run() {
         break;
       case 4: this->deleteFromList(); // delete
         break;
-      case 5: // delete duplicates
+      case 5: this->deleteDuplicates();
         break;
       case 6: this->findItemInList(); 
         break;
-      case 7: // find next
+      case 7: this->findNextItem();
         break;
       case 8: 
         cout << "List: ";
@@ -85,6 +85,9 @@ void Executive::run() {
   }
 }
 
+/* 
+Gets an integer from an istream object
+*/
 int Executive::getInt(std::istream& stream) const {
   string input;
   int value;
@@ -113,8 +116,24 @@ void Executive::insertIntoList() {
   m_list.insertFront(newItem);
 }
 
+void Executive::findNextItem() const {
+  int item;
+  cout << "Enter the number to find its next element: ";
+  item = this->getInt(cin);
+
+  if (m_list.find(item)) {
+    int index = m_list.getIndexOfItem(item);
+    if (index < m_list.length() - 1) {
+      cout << m_list.getItemAtIndex(index + 1) << " is next after " << item;
+    } else {
+      cout << "None";
+    }
+  } else {
+    cout << "Could not find element " << item << " in list";
+  }
+}
+
 void Executive::deleteFromList() {
-  string input;
   int itemToBeDeleted;
 
   cout << "Choose a number to be deleted from the list: ";
@@ -129,12 +148,27 @@ void Executive::deleteFromList() {
   }
 }
 
+void Executive::deleteDuplicates() {
+  int index = 0;
+  int item;
+
+  while (index < m_list.length()) {
+    item = m_list.getItemAtIndex(index);  
+    while (m_list.countItem(item) > 1) {
+      m_list.removeItem(item); 
+    }
+    index++;
+  }
+
+  cout << "Duplicates deleted.";
+}
+
 void Executive::printItemAtIndex() const {
   int index;
   bool validIndex = false;
 
   while (!validIndex) {
-    cout << "Enter an integer: ";
+    cout << "Enter index of item to be deleted: ";
     index = this->getInt(cin);
     if (index < 0 || index > m_list.length() - 1) {
       cout << "Index out of list range.\n";
@@ -159,9 +193,14 @@ void Executive::findItemInList() const {
 void Executive::readFileIntoList() {
   string line;
   int num;
-  while (std::getline(m_infile, line)) {
-    num = stoi(line);
-    m_list.insertFront(num);
+  while (m_infile >> line) {
+    try {
+      num = stoi(line);
+      m_list.insertFront(num);
+    } catch (exception& e) {
+      cout << "Error reading file: ";
+      throw std::runtime_error(e.what());
+    }
   }
 }
 
