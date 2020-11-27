@@ -168,7 +168,7 @@ void Executive::printItemAtIndex() const {
   bool validIndex = false;
 
   while (!validIndex) {
-    cout << "Enter index of item to be deleted: ";
+    cout << "Enter index of item: ";
     index = this->getInt(cin);
     if (index < 0 || index > m_list.length() - 1) {
       cout << "Index out of list range.\n";
