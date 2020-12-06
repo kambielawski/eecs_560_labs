@@ -12,7 +12,7 @@ using namespace std;
 class Executive {
 private:
 ifstream &m_infile;
-HashTable<int> m_hashtable;
+HashTable<string> m_hashtable;
 void readFileIntoHashTable(ifstream& infile);
 
 public:

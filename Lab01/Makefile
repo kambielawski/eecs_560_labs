@@ -1,8 +1,8 @@
-main: main.o Executive.o
-	g++ -g -o main.o LinkedList.o
+main: main.o
+	g++ -g -std=c++11 -Wall main.o -o main 
 
-main.o: main.cpp Executive.h
-	g++ -g -c main.cpp
+main.o: main.cpp Executive.h LinkedList.h
+	g++ -c main.cpp
 
-Executive.o: Executive.h LinkedList.h
-  g++ -g -c 
+clean:
+	rm -f main *.o
