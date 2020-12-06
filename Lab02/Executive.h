@@ -13,12 +13,20 @@ using namespace std;
 struct PlayerEntry {
   int numGoals;
   string playerName;
+
+  bool operator==(const PlayerEntry& rhs) {
+    return (numGoals == rhs.numGoals && playerName == rhs.playerName);
+  }
 };
+
+ostream& operator << (ostream& o, const PlayerEntry& rhs) {
+  return o << rhs.playerName << " " << rhs.numGoals;
+}
 
 class Executive {
 private:
 ifstream &m_infile;
-HashTable<string> m_hashtable;
+HashTable<PlayerEntry> m_hashtable;
 void readFileIntoHashTable(ifstream& infile);
 void printMenu() const;
 
@@ -46,7 +54,6 @@ Executive::~Executive() {}
 void Executive::run() {
   int choice;
   while (choice != 7) {
-    cout << "--------------------\n";
     this->printMenu();
     choice = this->getInt(cin);
   
@@ -134,8 +141,7 @@ void Executive::readFileIntoHashTable(ifstream& infile) {
   while (!infile.eof()) {
     getline(infile, playerEntryString, ',');
     PlayerEntry playerEntry = parsePlayerEntry(playerEntryString);
-    cout << playerEntry.playerName << " " << playerEntry.numGoals << endl;
-    m_hashtable.add(playerEntry.numGoals, playerEntry.playerName);
+    m_hashtable.add(playerEntry.numGoals, playerEntry);
   }
 }
 
@@ -162,13 +168,16 @@ void Executive::addPlayer() {
   } catch (exception& e) {
     cout << "Failed to successfully insert record:\n" << e.what() << endl;
   }
-  if (m_hashtable.add(player.numGoals, player.playerName)) {
+  if (m_hashtable.add(player.numGoals, player)) {
     cout << "Record successfully inserted\n";
   }
 }
 
+void Executive::printPlayersList() const { 
+  m_hashtable.printLists();
+}
+
 void Executive::removePlayer() {}
-void Executive::printPlayersList() const {}
 void Executive::playersWithGreaterThan() const {}
 void Executive::playersWithLessThan() const {}
 void Executive::playersWithEqualTo() const {}

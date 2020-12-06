@@ -31,6 +31,7 @@ bool add(int searchKey, ItemType item);
 bool remove(int searchKey, ItemType item);
 void printLengths() const;
 void printLists() const;
+int bucketSize() const;
 
 };
 
@@ -75,8 +76,17 @@ void HashTable<ItemType>::printLengths() const {
 template <typename ItemType>
 void HashTable<ItemType>::printLists() const {
   for (int i = 0; i < m_bucketSize; i++) {
-    m_hashtable[i].printList();
+    cout << i << ": ";
+    for (int j = 0; j < m_hashtable[i].length(); j++) {
+      cout << "-> " << m_hashtable[i].getItemAtIndex(j);
+    }
+    cout << "\n";
   }
+}
+
+template <typename ItemType>
+int HashTable<ItemType>::bucketSize() const {
+  return m_bucketSize;
 }
 
 template <typename ItemType>
