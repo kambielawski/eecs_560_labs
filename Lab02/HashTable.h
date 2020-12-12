@@ -7,6 +7,7 @@
 #include "LinkedList.h"
 
 #include <iostream>
+#include <functional>
 using namespace std;
 
 template <typename ItemType>
@@ -32,6 +33,7 @@ bool remove(int searchKey, ItemType item);
 void printLengths() const;
 void printLists() const;
 int bucketSize() const;
+void traverseTable(std::function<bool (ItemType, int)> compFunc, int compNum, std::function<void (ItemType)> func);
 
 };
 
@@ -101,6 +103,28 @@ bool HashTable<ItemType>::add(int searchKey, ItemType item) {
   m_hashtable[index].insertBack(item);
   m_numItems++;
   return true;
+}
+
+/* 
+params
+@function<bool (ItemType, int)> compFunc - takes two params
+    @ItemType item - is the item in the hashtable
+    @int num - number for comparing the item's search key (compNum passed)
+@int compNum - comparison number for comparing item's search key to
+@function<void ItemType> func - takes the item and does something with it
+
+*/
+template <typename ItemType>
+void HashTable<ItemType>::traverseTable(std::function<bool (ItemType, int)> compFunc, int compNum, std::function<void (ItemType)> func) {
+  ItemType item;
+  for (int i = 0; i < m_bucketSize; i++) {
+    for (int j = 0; j < m_hashtable[i].length(); j++) {
+      item = m_hashtable[i].getItemAtIndex(j);
+      if (compFunc(item, compNum)) {
+        func(item);
+      }
+    }
+  }
 }
 
 /* 

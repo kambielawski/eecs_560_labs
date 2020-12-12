@@ -2,6 +2,7 @@
 #define EXECUTIVE_H
 
 #include <string>
+#include <functional>
 #include <sstream>
 #include <stdexcept>
 #include <algorithm>
@@ -37,9 +38,9 @@ void run();
 void addPlayer();
 void removePlayer();
 void printPlayersList() const;
-void playersWithEqualTo() const;
-void playersWithGreaterThan() const;
-void playersWithLessThan() const;
+void playersWithEqualTo();
+void playersWithGreaterThan();
+void playersWithLessThan();
 int getInt(std::istream& stream) const;
 PlayerEntry parsePlayerEntry(string playerEntry) const;
 
@@ -177,9 +178,56 @@ void Executive::printPlayersList() const {
   m_hashtable.printLists();
 }
 
-void Executive::removePlayer() {}
-void Executive::playersWithGreaterThan() const {}
-void Executive::playersWithLessThan() const {}
-void Executive::playersWithEqualTo() const {}
+void Executive::removePlayer() {
+  PlayerEntry player;
+  string playerEntryString;
+  cout << "Enter the record to be removed: ";
+  getline(cin, playerEntryString);
+  try {
+    player = this->parsePlayerEntry(playerEntryString);
+  } catch (exception& e) {
+    cout << "Failed to successfully remove record:\n" << e.what() << endl;
+  }
+  if (m_hashtable.remove(player.numGoals, player)) {
+    cout << "Record successfully removed\n";
+  } else {
+    cout << "Could not find record '" << playerEntryString << "'\n";
+  }
+}
+
+bool greaterThan(PlayerEntry player, int comp) {
+  return player.numGoals > comp;
+}
+bool lessThan(PlayerEntry player, int comp) {
+  return player.numGoals < comp;
+}
+bool equalTo(PlayerEntry player, int comp) {
+  return player.numGoals == comp;
+}
+void printPlayerName(PlayerEntry player) {
+  cout << player.playerName << endl;
+}
+
+void Executive::playersWithGreaterThan() {
+  cout << "Enter goal count: ";
+  int goalCount = this->getInt(cin);
+  
+  m_hashtable.traverseTable(greaterThan, goalCount, printPlayerName);
+}
+
+void Executive::playersWithLessThan() {
+  cout << "Enter goal count: ";
+  int goalCount = this->getInt(cin);
+  
+  m_hashtable.traverseTable(lessThan, goalCount, printPlayerName);
+}
+
+void Executive::playersWithEqualTo() {
+  cout << "Enter goal count: ";
+  int goalCount = this->getInt(cin);
+  
+  m_hashtable.traverseTable(equalTo, goalCount, printPlayerName);
+}
+
 
 #endif
